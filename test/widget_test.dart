@@ -1,30 +1,38 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:testapp/main.dart';
+import 'package:testapp/features/products/data/models/product.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('Product.fromJson', () {
+    test('maps all fields from API JSON', () {
+      final product = Product.fromJson({
+        'id': 12,
+        'name': 'Test Product',
+        'slug': 'test-product',
+        'price': 250000,
+        'stock': 8,
+        'is_active': true,
+      });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      expect(product.id, 12);
+      expect(product.name, 'Test Product');
+      expect(product.slug, 'test-product');
+      expect(product.price, 250000);
+      expect(product.stock, 8);
+      expect(product.isActive, isTrue);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('maps an inactive product', () {
+      final product = Product.fromJson({
+        'id': 13,
+        'name': 'Inactive Product',
+        'slug': 'inactive-product',
+        'price': 100,
+        'stock': 0,
+        'is_active': false,
+      });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      expect(product.isActive, isFalse);
+      expect(product.stock, 0);
+    });
   });
 }

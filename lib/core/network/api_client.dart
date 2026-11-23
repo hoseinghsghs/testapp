@@ -1,0 +1,27 @@
+import 'package:dio/dio.dart';
+
+class ApiClient {
+  late final Dio dio;
+
+  ApiClient() {
+    dio = Dio(
+      BaseOptions(
+        baseUrl: 'http://127.0.0.1:8000/api',
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+  }
+
+  Future<Response> get(String path) async {
+    return await dio.get(path);
+  }
+
+  Future<Response> post(String path, {Map<String, dynamic>? data}) async {
+    return await dio.post(path, data: data);
+  }
+}
